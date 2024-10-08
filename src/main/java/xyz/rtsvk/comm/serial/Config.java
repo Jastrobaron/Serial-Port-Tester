@@ -1,9 +1,7 @@
 package xyz.rtsvk.comm.serial;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -48,6 +46,12 @@ public class Config extends LinkedHashMap<String, Object> {
 		return cfg;
 	}
 
+	public static void copyDefaultConfig(File fileToWrite) throws IOException {
+		InputStream defCfgStream = Config.class.getResourceAsStream("/default-config.properties");
+		assert defCfgStream != null;
+		Files.copy(defCfgStream, fileToWrite.toPath());
+	}
+
 	private static Config parse(String[] args, boolean checkPrefix) {
 		Config cfg = new Config();
 
@@ -73,10 +77,6 @@ public class Config extends LinkedHashMap<String, Object> {
 		}
 
 		return cfg;
-	}
-
-	public static Config copyDefaultConfig(File fileToWrite) {
-
 	}
 
 	public static Config writeConfig(Config config, String filename) throws IOException {
